@@ -61,6 +61,7 @@ def main():
     input_records = []
     for record in records:
         sid = record["id"]
+        record["media"]["comparison"]["poster"] = f"media/{sid}/keyframe_000000.jpg"
         score = scores[sid]
         methods = score.get("methods", [])
         if {m.get("method") for m in methods} != {"HGGT", "HaWoR"}:

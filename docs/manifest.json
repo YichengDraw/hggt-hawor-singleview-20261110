@@ -239,7 +239,7 @@
       "media": {
         "comparison": {
           "src": "media/dexycb_box/combined.mp4",
-          "poster": "media/dexycb_box/keyframe_000037.jpg",
+          "poster": "media/dexycb_box/keyframe_000000.jpg",
           "label": "原始 RGB / HGGT（标定平移适配） / HaWoR（标定相机）",
           "width": 1920,
           "height": 544
@@ -411,7 +411,7 @@
       "media": {
         "comparison": {
           "src": "media/dexycb_banana/combined.mp4",
-          "poster": "media/dexycb_banana/keyframe_000036.jpg",
+          "poster": "media/dexycb_banana/keyframe_000000.jpg",
           "label": "原始 RGB / HGGT（标定平移适配） / HaWoR（标定相机）",
           "width": 1920,
           "height": 544
@@ -661,7 +661,7 @@
       "media": {
         "comparison": {
           "src": "media/aria_1976/combined.mp4",
-          "poster": "media/aria_1976/keyframe_000075.jpg",
+          "poster": "media/aria_1976/keyframe_000000.jpg",
           "label": "原始 RGB / HGGT（标定平移适配） / HaWoR（标定相机）",
           "width": 1920,
           "height": 704
@@ -911,7 +911,7 @@
       "media": {
         "comparison": {
           "src": "media/aria_3209/combined.mp4",
-          "poster": "media/aria_3209/keyframe_000075.jpg",
+          "poster": "media/aria_3209/keyframe_000000.jpg",
           "label": "原始 RGB / HGGT（标定平移适配） / HaWoR（标定相机）",
           "width": 1920,
           "height": 704

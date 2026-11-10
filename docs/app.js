@@ -167,6 +167,9 @@
     frameInput.setAttribute('aria-label', '跳转到回放帧');
     const frameTotal = el('span', '', '/ — 帧');
     frameLabel.append(frameInput, frameTotal);
+    const jumpButton = el('button', 'jump', '跳转');
+    jumpButton.type = 'button';
+    jumpButton.setAttribute('aria-label', '跳转到指定帧');
     const speedLabel = el('label', 'speed-label', '速度');
     const speed = el('select');
     speed.setAttribute('aria-label', '播放速度');
@@ -188,7 +191,7 @@
       } catch (_) { /* The direct video link remains available if fullscreen is blocked. */ }
     });
     const timeLabel = el('span', 'time-label', '0.00 s');
-    transport.append(playButton, previous, next, frameLabel, speedLabel, fullscreen, timeLabel);
+    transport.append(playButton, previous, next, frameLabel, jumpButton, speedLabel, fullscreen, timeLabel);
     const timeline = el('input', 'timeline');
     timeline.type = 'range';
     timeline.min = '0';
@@ -261,6 +264,15 @@
       updateReadout(clamped);
     }
 
+    function jumpToInputFrame() {
+      const requestedFrame = frameInput.valueAsNumber;
+      if (!Number.isFinite(requestedFrame)) {
+        frameInput.value = String(currentFrame + 1);
+        return;
+      }
+      seek(requestedFrame - 1);
+    }
+
     function tick() {
       if (!playing) return;
       const time = master.currentTime;
@@ -311,7 +323,14 @@
     previous.addEventListener('click', () => seek(currentFrame - 1));
     next.addEventListener('click', () => seek(currentFrame + 1));
     timeline.addEventListener('input', () => seek(Number(timeline.value)));
-    frameInput.addEventListener('change', () => seek(Number(frameInput.value) - 1));
+    frameInput.addEventListener('change', jumpToInputFrame);
+    frameInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        jumpToInputFrame();
+      }
+    });
+    jumpButton.addEventListener('click', jumpToInputFrame);
     speed.addEventListener('change', () => { for (const video of videos) video.playbackRate = Number(speed.value); });
     master.addEventListener('loadedmetadata', () => {
       if (!(Number(sample.frame_count) > 0)) frameCount = Math.max(1, Math.round(master.duration * fps));
