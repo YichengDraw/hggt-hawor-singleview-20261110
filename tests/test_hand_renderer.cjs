@@ -128,3 +128,14 @@ test('shader failure on a WebGL-bound canvas preserves a useful original error',
   const c={getContext:kind=>kind==='webgl'?gl:null};
   assert.throws(()=>H.createRenderer(c),/shader compile diagnostic/);
 });
+
+// Camera-aligned startup must not silently return to the oblique preset.
+test('viewer defaults and resets to camera-aligned direction', () => {
+  const viewer = fs.readFileSync(path.join(__dirname, '../docs/viewer3d.js'), 'utf8');
+  assert.match(viewer, /rotation=H\.presets\.front\.slice\(\),center=/);
+  assert.match(viewer, /function reset\(\)\{rotation=H\.presets\.front\.slice\(\);viewName='相机视角'/);
+  const right=H.rotate(H.cv([1,0,2]),H.presets.front);
+  const down=H.rotate(H.cv([0,1,2]),H.presets.front);
+  assert.ok(right[0]>0);
+  assert.ok(-down[1]>0);
+});
