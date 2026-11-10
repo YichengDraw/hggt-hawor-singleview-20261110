@@ -23,3 +23,9 @@ Methods: HGGT https://github.com/lym29/HGGT and HaWoR https://github.com/Thunder
 ## Reproduce
 
 Run `python scripts/export_interactive_3d.py --root PROJECT --gt-release reviewed_licenses.json` using the existing NumPy environment. The license JSON is keyed by dataset (`DexYCB`, `HOT3D-Aria`), each with `license_url`, `attribution`, and `permission_basis`. Without a reviewed entry, GT is not included in the public sequence output. The exporter validates frame IDs, timestamps, sides, shapes, finite display geometry and the translation-only property, and writes `validation.json` plus source SHA-256 values.
+
+## Lit viewer and illustrative shells (2026-11-10 update)
+
+The interactive viewer now renders lit cylinders and joint spheres with perspective and depth testing. An optional translucent shell is procedurally generated from these joints using heuristic radii and palm thickness. It is an illustrative visualization, not a measured GT surface, MANO mesh, or either method’s predicted mesh. It is not used for evaluation. No new MANO vertices, topology, models, or dataset meshes are distributed. Original joint positions and all evaluation data remain unchanged.
+
+Mouse/single-touch rotation uses a screen-space quaternion trackball. Two-touch gestures scale and pan. View changes, focusing and wrist-centering affect display only. The software fallback uses the same geometry with a per-pixel depth buffer when WebGL is unavailable.

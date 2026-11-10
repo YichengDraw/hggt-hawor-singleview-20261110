@@ -247,9 +247,13 @@
     }
 
     function pause() {
+      const wasPlaying = playing;
       playing = false;
       for (const video of videos) video.pause();
       cancelTick();
+      // A slow compatible renderer may have skipped callbacks. Freeze the 3D
+      // readout on the video's actual stopped frame, not the previous callback.
+      if (wasPlaying) updateReadout(frameAt(master.currentTime));
       playButton.textContent = '▶ 播放';
       playButton.setAttribute('aria-label', '播放同步视频');
     }

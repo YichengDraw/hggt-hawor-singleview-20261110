@@ -75,10 +75,24 @@
 
 参考用户指定的 [EgoHSI3R 复现页](https://egohsi3r-experiments-20261104.yichengdraw.chatgpt.site/)；通过用户已有的 `egohsi3r_reproduction_20261104/index.html` 核对其实际结构。本页新增同步回放控件和指标汇总，不修改原站点。
 
-## 可操作三维视图（2026-11-10）
+## 可操作三维视图（2026-11-10 立体交互更新）
 
-`viewer3d.js` 是无外部依赖的正交 3D 骨架查看器。每条序列支持 GT / HGGT / HaWoR 独立显隐、原生 / 标定平移适配 HGGT、左右手、相机空间 / 腕部平移对齐、鼠标及触屏旋转缩放平移。21 关节来自真实评价数据与保存的预测，未新增 MANO 顶点或网格拓扑。`interactive3d/README.md` 记录数据许可与转换。
+`viewer3d.js` 负责选择、手势与视频同步，`hand-renderer.js` 是无外部依赖的透视三维渲染器。默认使用 WebGL；若不可用，则使用像素级深度缓冲的软件三维后备。圆柱骨骼、球形关节具有方向光、高光与深度遮挡。屏幕空间轨迹球四元数让物体跟随拖动，没有旧版左右方向反转或俯仰极点锁定。
 
-查看器通过 `comparisonframe` 事件与既有播放器共用帧索引；回放使用解码帧的 `mediaTime`。初始化只加载第一条序列，其他序列按需加载，源采集时间另行显示。初始观察范围覆盖整条序列；手部缺失保留为空，HaWoR 时序补全明确标记。
+透明手壳由当前 21 关节位置和启发式厚度生成，仅是形状示意，不是 GT 真实表面、MANO 网格或方法预测网格，不用于评价。可关闭或调节不透明度。没有新增 MANO 顶点、拓扑或授权模型资产。骨骼显示半径同样是视觉参数，关节中心及源数据不变。多方法透明表面相交时，透明混合是可视化近似。
 
-验证：`node --check docs/viewer3d.js`、`node --check docs/app.js`、`python scripts/validate_interactive_3d.py`（在仓库根目录运行）。数据验证包含原始帧映射、单位、有限性、左右手、原生/适配平移关系，以及用浏览器 JSON 重算关节误差与既有指标一致性。`interactive3d/validation.json` 保存导出校验记录。
+保留 GT / HGGT / HaWoR 独立显隐、原生 / 标定平移适配 HGGT、左右手、相机空间 / 腕部平移对齐。默认斜视并容纳整段运动；「聚焦当前帧」与双击可放大当前姿态，「容纳整段」恢复完整观察范围。缩放不改变源几何。极端放大会产生相机近裁剪，适时使用重置。
+
+查看器通过 `comparisonframe` 与原播放器共用帧索引；回放使用解码帧的 `mediaTime`。有样例 hash 时自动加载该例，否则加载第一例，其余按需载入，避免滚动时自动展开导致布局跳动。无效手与关节保留为空，HaWoR 时序补全明确标记。数据来源和许可见 `interactive3d/README.md`。
+
+验证（仓库根目录）：
+
+- `node --check docs/hand-renderer.js`
+- `node --check docs/viewer3d.js`
+- `node --check docs/app.js`
+- `node tests/test_hand_renderer.cjs`
+- `python scripts/validate_interactive_3d.py`
+
+Node 测试覆盖拖动方向/逆操作/长期归一化、真实数据有限性与不变性、空值、透明壳开关、软件深度缓冲和 WebGL 提交数学。数据验证涵盖 446 帧和 31 个时序补全手帧、原始帧映射、单位、左右手、原生/适配平移关系及与既有指标的一致性。
+
+浏览器测试夹具在 `tests/browser/`，从仓库根目录提供 HTTP 服务后打开 `tests/browser/qa.html`。夹具以 390px iframe 验证手机布局、实际页面的选择/帧控制和模拟指针/触摸处理。鼠标拖动另通过浏览器实际输入检查。模拟触摸不等同于物理手机测试。云端 QA 浏览器关闭 WebGL，因此在该浏览器验证的是软件后备；GPU 路径需在提供 WebGL 的浏览器检查。
