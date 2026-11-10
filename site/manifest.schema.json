@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HGGT / HaWoR reproduction showcase manifest",
+  "type": "object",
+  "required": ["schema_version", "samples"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "title": {"type": "string"},
+    "subtitle": {"type": "string"},
+    "updated_at": {"type": "string"},
+    "summary": {"type": "array", "items": {"type": "string"}},
+    "scope_notes": {"type": "array", "items": {"type": "string"}},
+    "metrics_note": {"type": "string"},
+    "protocol": {"type": "array", "items": {"type": "object", "required": ["label", "value"], "properties": {"label": {"type": "string"}, "value": {"type": "string"}}}},
+    "downloads": {"type": "array", "items": {"$ref": "#/$defs/link"}},
+    "sources": {"type": "array", "items": {"type": "object", "required": ["label", "url"], "properties": {"label": {"type": "string"}, "url": {"type": "string"}, "note": {"type": "string"}}}},
+    "metric_definitions": {"type": "array", "items": {"type": "object", "required": ["key", "label"], "properties": {"key": {"type": "string"}, "label": {"type": "string"}, "unit": {"type": "string"}, "description": {"type": "string"}, "decimals": {"type": "integer", "minimum": 0, "maximum": 6}}}},
+    "samples": {"type": "array", "items": {"$ref": "#/$defs/sample"}}
+  },
+  "$defs": {
+    "link": {"type": "object", "required": ["label", "href"], "properties": {"label": {"type": "string"}, "href": {"type": "string"}}},
+    "media": {"oneOf": [{"type": "string"}, {"type": "object", "required": ["src"], "properties": {"src": {"type": "string"}, "poster": {"type": "string"}, "label": {"type": "string"}, "width": {"type": "integer", "minimum": 1}, "height": {"type": "integer", "minimum": 1}}}]},
+    "sample": {
+      "type": "object",
+      "required": ["id", "title", "dataset", "frame_count", "fps"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$"},
+        "title": {"type": "string"},
+        "short_title": {"type": "string"},
+        "dataset": {"type": "string"},
+        "sequence": {"type": "string"},
+        "camera": {"type": "string"},
+        "description": {"type": "string"},
+        "frame_count": {"type": "integer", "minimum": 1},
+        "fps": {"type": "number", "exclusiveMinimum": 0},
+        "source_frame_start": {"type": "integer"},
+        "source_frame_ids": {"type": "array", "items": {"type": ["integer", "string"]}},
+        "video_frame_timestamps_s": {"type": "array", "items": {"type": "number", "minimum": 0}},
+        "status": {"enum": ["complete", "running", "pending", "unavailable"]},
+        "status_label": {"type": "string"},
+        "legend": {"type": "string"},
+        "notes": {"type": "array", "items": {"type": "string"}},
+        "media": {"type": "object", "properties": {"input": {"$ref": "#/$defs/media"}, "hggt": {"$ref": "#/$defs/media"}, "hawor": {"$ref": "#/$defs/media"}, "comparison": {"$ref": "#/$defs/media"}}},
+        "media_pending_message": {"type": "string"},
+        "metrics_title": {"type": "string"},
+        "metrics_note": {"type": "string"},
+        "metrics_pending_message": {"type": "string"},
+        "metrics": {"type": "array", "items": {"type": "object", "required": ["method", "values"], "properties": {"method": {"type": "string"}, "values": {"type": "object", "additionalProperties": {"type": ["number", "string", "null"]}}}}},
+        "links": {"type": "array", "items": {"$ref": "#/$defs/link"}},
+        "keyframes": {"type": "array", "items": {"type": "object", "required": ["src"], "properties": {"src": {"type": "string"}, "label": {"type": "string"}, "frame_index": {"type": "integer", "minimum": 0}}}}
+      }
+    }
+  }
+}

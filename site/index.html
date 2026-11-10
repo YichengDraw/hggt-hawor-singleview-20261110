@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="HGGT 与 HaWoR 在同一单相机视频上的手部重建复现、同步回放和逐序列评价。">
+  <title>HGGT × HaWoR · 单视角复现</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#samples">跳到视频对比</a>
+  <header class="page-header">
+    <div class="eyebrow">EGO WM · REPRODUCTION</div>
+    <div class="title-row"><h1 id="page-title">HGGT × HaWoR · 单视角复现</h1><span class="date" id="updated-at"></span></div>
+    <p class="lead" id="page-subtitle">同一段视频、同一相机，直接查看手部重建结果。</p>
+    <div id="summary" class="summary"></div>
+    <div id="top-links" class="link-list"></div>
+    <nav class="sample-nav" id="sample-nav" aria-label="样例导航"></nav>
+  </header>
+  <main>
+    <section class="section-block protocol-block" id="protocol-section" hidden>
+      <h2>比较设置</h2>
+      <dl class="protocol-grid" id="protocol"></dl>
+      <div class="scope-notes" id="scope-notes"></div>
+    </section>
+    <section class="section-block" id="metrics-section" hidden>
+      <div class="section-heading"><h2>结果一览</h2><a href="manifest.json" class="small-link">全部数据 JSON ↗</a></div>
+      <div id="metrics-summary"></div>
+      <details class="metric-guide" id="metric-guide"><summary>指标怎么读</summary><div id="metric-definitions"></div></details>
+    </section>
+    <div class="sample-section-heading">
+      <h2>逐序列对比</h2>
+      <div id="dataset-filters" class="dataset-filters" aria-label="按数据集筛选"></div>
+    </div>
+    <div id="samples" aria-live="polite"><p class="loading">正在读取实验记录……</p></div>
+    <section class="section-block" id="sources-section" hidden>
+      <h2>代码、数据与参考</h2>
+      <ul id="sources" class="sources"></ul>
+    </section>
+  </main>
+  <footer><span>HGGT / HaWoR · 逐帧复现记录</span><a href="#">回到顶部 ↑</a></footer>
+  <noscript><p class="error-banner">请启用 JavaScript 查看同步视频和评价表；原始记录可直接下载 <a href="manifest.json">manifest.json</a>。</p></noscript>
+  <script src="app.js" defer></script>
+</body>
+</html>
