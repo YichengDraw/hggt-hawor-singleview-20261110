@@ -139,3 +139,32 @@ test('viewer defaults and resets to camera-aligned direction', () => {
   assert.ok(right[0]>0);
   assert.ok(-down[1]>0);
 });
+
+test('camera frustum uses current calibrated K, origin and +Z without mutating metadata',()=>{
+  const meta={K:[[600,0,310],[0,620,250],[0,0,1]],image_size:[640,480]},before=JSON.stringify(meta);deepFreeze(meta);
+  const cam=H.cameraModel(meta);vecNear(cam.origin,[0,0,0]);vecNear(cam.forward,[0,0,1]);
+  const pixels=[[0,0],[640,0],[640,480],[0,480]];
+  cam.corners.forEach((p,i)=>{near(p[2],.4);vecNear([600*p[0]/p[2]+310,620*p[1]/p[2]+250],pixels[i]);});
+  assert.ok(cam.corners[0][0]<0&&cam.corners[0][1]<0);assert.equal(JSON.stringify(meta),before);
+  assert.equal(H.cameraModel(null),null);assert.equal(H.cameraModel({K:[[0,0,0],[0,1,0],[0,0,1]],image_size:[640,480]}),null);
+  const g=H.cameraGeometry(cam);assert.ok(g.length>0&&g.every(Number.isFinite));assert.equal(g.length%30,0);
+  const r=new H.SoftwareRenderer(canvas(240,168));const v=H.fitScene(cam.points,H.presets.oblique,240,168);r.geometry=H.combineGeometry({bones:new Float32Array(),shell:new Float32Array()},cam);r.draw(v);assert.ok(r.depth.some(Number.isFinite));
+  for(const p of cam.points){const q=r.project(p,v);assert.ok(q[0]>0&&q[0]<240&&q[1]>0&&q[1]<168&&v.distance-q[2]>0);}
+});
+test('camera guide toggle keeps hand geometry unchanged and overview is lightweight',()=>{
+  const cam=H.cameraModel({K:[[330,0,384],[0,330,384],[0,0,1]],image_size:[768,768]});
+  const base={bones:triangle(0,[1,0,0]),shell:triangle(-.1,[1,0,0],.14)};
+  assert.equal(H.combineGeometry(base,null),base);const combined=H.combineGeometry(base,cam);assert.deepEqual(combined.bones.slice(0,base.bones.length),base.bones);assert.equal(combined.shell,base.shell);
+  const overview=H.overviewGeometry([{joints:[[0,0,.3],[.1,0,.4]],color:[1,0,0]}],[[0,1]],cam);assert.equal(overview.shell.length,0);assert.ok(overview.bones.every(Number.isFinite));
+});
+
+test('published per-frame camera metadata matches all four joint sequences',()=>{
+  const metadata=JSON.parse(fs.readFileSync(path.join(root,'docs/interactive3d/cameras.json')));
+  assert.equal(Object.keys(metadata.cameras).length,4);
+  for(const [id,c] of Object.entries(metadata.cameras)){
+    const d=JSON.parse(fs.readFileSync(path.join(root,'docs/interactive3d',id+'.json')));assert.deepEqual(c.frame_ids,d.frame_ids);
+    const Ks=c.K_frames||c.frame_ids.map(()=>c.K);assert.equal(Ks.length,d.frame_ids.length);
+    const unique=new Set(Ks.map(JSON.stringify)).size;assert.equal(unique,id==='aria_1976'?3:id==='aria_3209'?4:1);
+    for(const K of Ks){const cam=H.cameraModel({...c,K});assert.ok(cam);for(const p of cam.corners){const u=K[0][0]*p[0]/p[2]+K[0][2],v=K[1][1]*p[1]/p[2]+K[1][2];assert.ok(Math.min(Math.abs(u),Math.abs(u-c.image_size[0]))<1e-9);assert.ok(Math.min(Math.abs(v),Math.abs(v-c.image_size[1]))<1e-9);}}
+  }
+});
