@@ -1,0 +1,16 @@
+{
+  "DexYCB": {
+    "license_url": "https://creativecommons.org/licenses/by-nc/4.0/",
+    "attribution": "DexYCB: A Benchmark for Capturing Hand Grasping of Objects, Chao et al., CVPR 2021. NVIDIA and contributors.",
+    "permission_basis": "CC BY-NC dataset terms, noncommercial research visualization with attribution; selected frames, camera-space packaging and 1 micrometer rounding.",
+    "dataset_terms_url": "https://dex-ycb.github.io/",
+    "license_name": "CC BY-NC 4.0"
+  },
+  "HOT3D-Aria": {
+    "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "attribution": "HOT3D: Hand and Object Tracking in 3D from Egocentric Multi-View Videos, Banerjee et al., CVPR 2025. Meta Platforms Technologies, LLC and contributors.",
+    "permission_basis": "CC BY-NC-SA dataset terms, noncommercial research visualization with attribution and ShareAlike for derivative annotations; selected frames, world-to-RGB-camera conversion and 1 micrometer rounding.",
+    "dataset_terms_url": "https://huggingface.co/datasets/bop-benchmark/hot3d/blob/main/hot3d_dataset_license_agreement.pdf",
+    "license_name": "CC BY-NC-SA 4.0"
+  }
+}

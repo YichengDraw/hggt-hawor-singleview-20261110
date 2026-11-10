@@ -236,6 +236,7 @@
       else if (Number.isFinite(sample.source_frame_start)) clock += ` · 源帧 ${sample.source_frame_start + currentFrame}`;
       timeLabel.textContent = clock;
       timeline.setAttribute('aria-valuetext', `第 ${currentFrame + 1} 帧，共 ${frameCount} 帧`);
+      wrapper.dispatchEvent(new CustomEvent('comparisonframe', {detail: {frame: currentFrame}}));
     }
 
     function cancelTick() {
@@ -273,9 +274,9 @@
       seek(requestedFrame - 1);
     }
 
-    function tick() {
+    function tick(now, metadata) {
       if (!playing) return;
-      const time = master.currentTime;
+      const time = metadata && Number.isFinite(metadata.mediaTime) ? metadata.mediaTime : master.currentTime;
       updateReadout(frameAt(time));
       for (const video of videos.slice(1)) {
         if (!errors.has(video) && Math.abs(video.currentTime - time) > Math.max(0.04, 1.25 / fps)) video.currentTime = time;
@@ -343,6 +344,7 @@
       else if (event.key === 'ArrowRight') { event.preventDefault(); seek(currentFrame + 1); }
       else if (event.code === 'Space') { event.preventDefault(); playing ? pause() : play(); }
     });
+    if (window.HandComparison3D) window.HandComparison3D.attach(wrapper, sample, control);
     updateReadout(0);
     return wrapper;
   }

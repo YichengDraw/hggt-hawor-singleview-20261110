@@ -74,3 +74,11 @@
 ## 版式来源
 
 参考用户指定的 [EgoHSI3R 复现页](https://egohsi3r-experiments-20261104.yichengdraw.chatgpt.site/)；通过用户已有的 `egohsi3r_reproduction_20261104/index.html` 核对其实际结构。本页新增同步回放控件和指标汇总，不修改原站点。
+
+## 可操作三维视图（2026-11-10）
+
+`viewer3d.js` 是无外部依赖的正交 3D 骨架查看器。每条序列支持 GT / HGGT / HaWoR 独立显隐、原生 / 标定平移适配 HGGT、左右手、相机空间 / 腕部平移对齐、鼠标及触屏旋转缩放平移。21 关节来自真实评价数据与保存的预测，未新增 MANO 顶点或网格拓扑。`interactive3d/README.md` 记录数据许可与转换。
+
+查看器通过 `comparisonframe` 事件与既有播放器共用帧索引；回放使用解码帧的 `mediaTime`。初始化只加载第一条序列，其他序列按需加载，源采集时间另行显示。初始观察范围覆盖整条序列；手部缺失保留为空，HaWoR 时序补全明确标记。
+
+验证：`node --check docs/viewer3d.js`、`node --check docs/app.js`、`python scripts/validate_interactive_3d.py`（在仓库根目录运行）。数据验证包含原始帧映射、单位、有限性、左右手、原生/适配平移关系，以及用浏览器 JSON 重算关节误差与既有指标一致性。`interactive3d/validation.json` 保存导出校验记录。
