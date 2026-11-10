@@ -1,0 +1,19 @@
+{
+  "source_directory": "/nvme-ssd2/wlq/do-as-i-do-official-20260930/source/reconstruction/modules/HaWoR",
+  "git_metadata_available": false,
+  "source_sha256": {
+    "demo.py": "f52fe3f8c03a61863f78f26e3601cb18e6808f1bcc0141c18b38dc720e6f3070",
+    "lib/models/hawor.py": "3c4ce9e5f2bb1f7a42e2d1668b40582f93836b58ea3cc2a3be0beb2bcf8b6de4",
+    "lib/datasets/track_dataset.py": "79ef470ce35177f71d2a5145b39ad148e53771de971a53ea88b872d0aa1b89c6",
+    "scripts/scripts_test_video/hawor_video.py": "9083c40f8cbc6564617b1bccf1c17bd3275d0796b5e14a248fd2b2e12e0b43f5"
+  },
+  "checkpoint": {
+    "file": "/nvme-ssd2/wlq/do-as-i-do-official-20260930/source/reconstruction/modules/HaWoR/weights/hawor/checkpoints/hawor.ckpt",
+    "bytes": 3267481572
+  },
+  "infiller": {
+    "file": "/nvme-ssd2/wlq/do-as-i-do-official-20260930/source/reconstruction/modules/HaWoR/weights/hawor/checkpoints/infiller.pt",
+    "bytes": 418603497
+  },
+  "version_note": "Existing Do as I Do vendored HaWoR runtime snapshot; exact upstream commit absent. Same model code/checkpoints as historical comparison; local source hashes recorded."
+}

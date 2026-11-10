@@ -1,0 +1,12 @@
+{
+  "source": "https://huggingface.co/catmint123/HGGT",
+  "download_endpoint": "https://hf-mirror.com/catmint123/HGGT/resolve/main/pytorch_model.bin",
+  "hub_revision": "f47bce8612f6611513bff94ff3d78e73f6cded68",
+  "file": "pytorch_model.bin",
+  "bytes": 5471898175,
+  "sha256": "247f7c9b387d9065daf59b99ceb161f2f7a504053187dc8b503291d1d5de9efe",
+  "expected_lfs_sha256": "247f7c9b387d9065daf59b99ceb161f2f7a504053187dc8b503291d1d5de9efe",
+  "hash_match": true,
+  "network": "direct curl --noproxy *",
+  "code_commit": "779929115643ebb88abd531c683af7e4ed892d99"
+}

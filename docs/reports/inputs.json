@@ -1,0 +1,128 @@
+{
+  "samples": [
+    {
+      "id": "dexycb_box",
+      "dataset": "DexYCB",
+      "sequence": "20200928_143606",
+      "camera": "836212060125",
+      "frames": 74,
+      "side_order": [
+        "left",
+        "right"
+      ],
+      "input_valid_hand_frames": 74,
+      "detected_hand_frames": 74,
+      "first_K": [
+        [
+          616.640869140625,
+          0.0,
+          308.548095703125
+        ],
+        [
+          0.0,
+          616.2581787109375,
+          248.52310180664062
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "GT_used_for_RGB_hand_boxes": false
+    },
+    {
+      "id": "dexycb_banana",
+      "dataset": "DexYCB",
+      "sequence": "20200928_145724",
+      "camera": "836212060125",
+      "frames": 72,
+      "side_order": [
+        "left",
+        "right"
+      ],
+      "input_valid_hand_frames": 72,
+      "detected_hand_frames": 72,
+      "first_K": [
+        [
+          616.640869140625,
+          0.0,
+          308.548095703125
+        ],
+        [
+          0.0,
+          616.2581787109375,
+          248.52310180664062
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "GT_used_for_RGB_hand_boxes": false
+    },
+    {
+      "id": "aria_1976",
+      "dataset": "HOT3D-Aria",
+      "sequence": "001976",
+      "camera": "214-1",
+      "frames": 150,
+      "side_order": [
+        "left",
+        "right"
+      ],
+      "input_valid_hand_frames": 300,
+      "detected_hand_frames": 300,
+      "first_K": [
+        [
+          331.933027787642,
+          0.0,
+          383.0891779119318
+        ],
+        [
+          0.0,
+          331.933027787642,
+          384.76409357244313
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "GT_used_for_RGB_hand_boxes": false
+    },
+    {
+      "id": "aria_3209",
+      "dataset": "HOT3D-Aria",
+      "sequence": "003209",
+      "camera": "214-1",
+      "frames": 150,
+      "side_order": [
+        "left",
+        "right"
+      ],
+      "input_valid_hand_frames": 269,
+      "detected_hand_frames": 269,
+      "first_K": [
+        [
+          332.2277610085227,
+          0.0,
+          383.4670743075284
+        ],
+        [
+          0.0,
+          332.2277610085227,
+          384.5295188210227
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "GT_used_for_RGB_hand_boxes": false
+    }
+  ]
+}

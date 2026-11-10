@@ -43,4 +43,3 @@ for sid,kind,seq,n in [('dexycb_box','DexYCB','20200928_143606',74),('dexycb_ban
 (R/'data/evaluation_manifest.json').write_text(json.dumps(dict(schema='hggt-singleview-evaluation-v1',eval_only=True,samples=evaluation),indent=2)+'\n')
 (R/'reports/data_inventory.json').write_text(json.dumps(summary,indent=2)+'\n')
 print(json.dumps(summary,indent=2))
-

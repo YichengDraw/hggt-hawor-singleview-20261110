@@ -1,0 +1,420 @@
+{
+  "schema": "hggt-hawor-metrics-v1",
+  "baseline_only": false,
+  "protocol": {
+    "comparison": "same RGB camera, cached image pixels, detector tracks and calibration",
+    "n_unit": "hand-frame pairs",
+    "coverage_unit": "fraction 0..1 of all annotated hands",
+    "paired_mask": "GT valid AND common detector available AND both methods finite",
+    "primary": "wrist-relative and per-hand-frame similarity-aligned MPJPE in mm",
+    "joint_definition": "16 native MANO FK joints retained; each dataset's 5 GT fingertip vertex markers substituted for both methods",
+    "tip_markers": {
+      "DexYCB": [
+        745,
+        317,
+        444,
+        556,
+        673
+      ],
+      "HOT3D-Aria": [
+        744,
+        320,
+        443,
+        554,
+        671
+      ]
+    },
+    "absolute": "HGGT uses a rigid translation fit to its own predicted 2D points and K; HaWoR uses calibrated scalar-focal/principal-point output",
+    "calibration": "HGGT uses per-frame full K; HaWoR API takes scalar focal=(fx+fy)/2 and median principal point per clip",
+    "world_trajectory": "not evaluated; camera-space hand reconstruction only",
+    "acceleration": "root-relative joint acceleration error in m/s^2; DexYCB nominal 30 Hz, Aria recorded nanosecond timestamps; only triplets valid for both methods",
+    "gt_usage": "scoring only; no GT poses, camera trajectory, boxes or depth enter inference",
+    "scope": "four development examples; no claim of an official benchmark or training-disjoint test"
+  },
+  "samples": [
+    {
+      "id": "dexycb_box",
+      "dataset": "DexYCB",
+      "frames": 74,
+      "annotation_eligible": 74,
+      "detected_hand_frames": 74,
+      "paired_hand_frames": 74,
+      "methods": [
+        {
+          "method": "HGGT",
+          "n": 74,
+          "n_absolute": 74,
+          "n_acceleration_triplets": 72,
+          "annotation_eligible": 74,
+          "prediction_available": 74,
+          "coverage": 1.0,
+          "rr_mpjpe_mm": 19.12233927345891,
+          "pa_mpjpe_mm": 5.612150185843106,
+          "base16_rr_mpjpe_mm": 16.620077656338026,
+          "mpjpe_mm": 34.94897145182086,
+          "wrist_error_mm": 30.335568617631132,
+          "native_mpjpe_mm": 499.36240799160737,
+          "native_definition_rr_mpjpe_mm": 19.1731559905805,
+          "native_definition_pa_mpjpe_mm": 5.636305496424289,
+          "rr_acceleration_error_m_s2": 6.5666519500690175,
+          "pa_scale_median": 1.0182872330126855,
+          "absolute_output": "calibration-only rigid translation adapter",
+          "per_hand": {
+            "left": {
+              "n": 0,
+              "rr_mpjpe_mm": null,
+              "pa_mpjpe_mm": null
+            },
+            "right": {
+              "n": 74,
+              "rr_mpjpe_mm": 19.12233927345891,
+              "pa_mpjpe_mm": 5.612150185843106
+            }
+          },
+          "adapter_reprojection_rmse_px": {
+            "n": 74,
+            "median": 1.2308369874954224,
+            "p95": 1.5190043687820434,
+            "max": 1.5904253721237183
+          },
+          "adapter_translation_norm_mm": {
+            "n": 74,
+            "median": 440.0732421875,
+            "p95": 749.332763671875,
+            "max": 760.9447021484375
+          },
+          "adapter_root_relative_change_max_mm": 0.00011920928955078125
+        },
+        {
+          "method": "HaWoR",
+          "n": 74,
+          "n_absolute": 74,
+          "n_acceleration_triplets": 72,
+          "annotation_eligible": 74,
+          "prediction_available": 74,
+          "coverage": 1.0,
+          "rr_mpjpe_mm": 10.501799738028687,
+          "pa_mpjpe_mm": 3.182610836696263,
+          "base16_rr_mpjpe_mm": 9.220177746168744,
+          "mpjpe_mm": 45.6908301624192,
+          "wrist_error_mm": 42.89337623132758,
+          "native_mpjpe_mm": 45.6908301624192,
+          "native_definition_rr_mpjpe_mm": 10.624112507523161,
+          "native_definition_pa_mpjpe_mm": 3.2434367877763717,
+          "rr_acceleration_error_m_s2": 2.9546580653920476,
+          "pa_scale_median": 1.0043901045393275,
+          "absolute_output": "calibrated camera-mode output",
+          "per_hand": {
+            "left": {
+              "n": 0,
+              "rr_mpjpe_mm": null,
+              "pa_mpjpe_mm": null
+            },
+            "right": {
+              "n": 74,
+              "rr_mpjpe_mm": 10.501799738028687,
+              "pa_mpjpe_mm": 3.182610836696263
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "dexycb_banana",
+      "dataset": "DexYCB",
+      "frames": 72,
+      "annotation_eligible": 72,
+      "detected_hand_frames": 72,
+      "paired_hand_frames": 72,
+      "methods": [
+        {
+          "method": "HGGT",
+          "n": 72,
+          "n_absolute": 72,
+          "n_acceleration_triplets": 70,
+          "annotation_eligible": 72,
+          "prediction_available": 72,
+          "coverage": 1.0,
+          "rr_mpjpe_mm": 9.750358114967554,
+          "pa_mpjpe_mm": 4.001693770497931,
+          "base16_rr_mpjpe_mm": 8.650328541601791,
+          "mpjpe_mm": 39.58631266248748,
+          "wrist_error_mm": 41.676275214111016,
+          "native_mpjpe_mm": 313.8623175826912,
+          "native_definition_rr_mpjpe_mm": 9.899331791252441,
+          "native_definition_pa_mpjpe_mm": 4.113416763274216,
+          "rr_acceleration_error_m_s2": 4.280577570154142,
+          "pa_scale_median": 0.9889483719594128,
+          "absolute_output": "calibration-only rigid translation adapter",
+          "per_hand": {
+            "left": {
+              "n": 0,
+              "rr_mpjpe_mm": null,
+              "pa_mpjpe_mm": null
+            },
+            "right": {
+              "n": 72,
+              "rr_mpjpe_mm": 9.750358114967554,
+              "pa_mpjpe_mm": 4.001693770497931
+            }
+          },
+          "adapter_reprojection_rmse_px": {
+            "n": 72,
+            "median": 1.1625785827636719,
+            "p95": 1.4404922366142274,
+            "max": 1.4598530530929565
+          },
+          "adapter_translation_norm_mm": {
+            "n": 72,
+            "median": 336.758544921875,
+            "p95": 506.6507751464845,
+            "max": 593.0491333007812
+          },
+          "adapter_root_relative_change_max_mm": 5.9604644775390625e-05
+        },
+        {
+          "method": "HaWoR",
+          "n": 72,
+          "n_absolute": 72,
+          "n_acceleration_triplets": 70,
+          "annotation_eligible": 72,
+          "prediction_available": 72,
+          "coverage": 1.0,
+          "rr_mpjpe_mm": 11.283541392775115,
+          "pa_mpjpe_mm": 2.6004962459369896,
+          "base16_rr_mpjpe_mm": 9.99789603472577,
+          "mpjpe_mm": 27.45422159874471,
+          "wrist_error_mm": 25.860750412221705,
+          "native_mpjpe_mm": 27.45422159874471,
+          "native_definition_rr_mpjpe_mm": 11.379270043996609,
+          "native_definition_pa_mpjpe_mm": 2.5187390222295005,
+          "rr_acceleration_error_m_s2": 1.8955313644685166,
+          "pa_scale_median": 0.9972577414554304,
+          "absolute_output": "calibrated camera-mode output",
+          "per_hand": {
+            "left": {
+              "n": 0,
+              "rr_mpjpe_mm": null,
+              "pa_mpjpe_mm": null
+            },
+            "right": {
+              "n": 72,
+              "rr_mpjpe_mm": 11.283541392775115,
+              "pa_mpjpe_mm": 2.6004962459369896
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "aria_1976",
+      "dataset": "HOT3D-Aria",
+      "frames": 150,
+      "annotation_eligible": 300,
+      "detected_hand_frames": 300,
+      "paired_hand_frames": 300,
+      "methods": [
+        {
+          "method": "HGGT",
+          "n": 300,
+          "n_absolute": 300,
+          "n_acceleration_triplets": 296,
+          "annotation_eligible": 300,
+          "prediction_available": 300,
+          "coverage": 1.0,
+          "rr_mpjpe_mm": 20.081899800046894,
+          "pa_mpjpe_mm": 11.120559194386903,
+          "base16_rr_mpjpe_mm": 15.872317696985526,
+          "mpjpe_mm": 29.322926369115024,
+          "wrist_error_mm": 23.322214701661228,
+          "native_mpjpe_mm": 46.775248620502865,
+          "native_definition_rr_mpjpe_mm": 20.00188371484759,
+          "native_definition_pa_mpjpe_mm": 11.050708811413475,
+          "rr_acceleration_error_m_s2": 8.642043964648844,
+          "pa_scale_median": 0.997104578686424,
+          "absolute_output": "calibration-only rigid translation adapter",
+          "per_hand": {
+            "left": {
+              "n": 150,
+              "rr_mpjpe_mm": 24.326232968257038,
+              "pa_mpjpe_mm": 14.349234172695093
+            },
+            "right": {
+              "n": 150,
+              "rr_mpjpe_mm": 15.837566631836747,
+              "pa_mpjpe_mm": 7.891884216078709
+            }
+          },
+          "adapter_reprojection_rmse_px": {
+            "n": 300,
+            "median": 0.19996407628059387,
+            "p95": 0.5495611399412156,
+            "max": 0.8228301405906677
+          },
+          "adapter_translation_norm_mm": {
+            "n": 300,
+            "median": 28.24862289428711,
+            "p95": 94.54820327758793,
+            "max": 126.76376342773438
+          },
+          "adapter_root_relative_change_max_mm": 5.9604644775390625e-05
+        },
+        {
+          "method": "HaWoR",
+          "n": 300,
+          "n_absolute": 300,
+          "n_acceleration_triplets": 296,
+          "annotation_eligible": 300,
+          "prediction_available": 300,
+          "coverage": 1.0,
+          "rr_mpjpe_mm": 18.726247378079197,
+          "pa_mpjpe_mm": 9.647112850879575,
+          "base16_rr_mpjpe_mm": 15.718644252712359,
+          "mpjpe_mm": 27.94306449937336,
+          "wrist_error_mm": 30.220055992941713,
+          "native_mpjpe_mm": 27.94306449937336,
+          "native_definition_rr_mpjpe_mm": 18.726247378079197,
+          "native_definition_pa_mpjpe_mm": 9.647112850879575,
+          "rr_acceleration_error_m_s2": 1.3733721433135768,
+          "pa_scale_median": 0.9943865651268831,
+          "absolute_output": "calibrated camera-mode output",
+          "per_hand": {
+            "left": {
+              "n": 150,
+              "rr_mpjpe_mm": 16.83723607465153,
+              "pa_mpjpe_mm": 12.268673651415105
+            },
+            "right": {
+              "n": 150,
+              "rr_mpjpe_mm": 20.615258681506866,
+              "pa_mpjpe_mm": 7.0255520503440465
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "aria_3209",
+      "dataset": "HOT3D-Aria",
+      "frames": 150,
+      "annotation_eligible": 300,
+      "detected_hand_frames": 269,
+      "paired_hand_frames": 269,
+      "methods": [
+        {
+          "method": "HGGT",
+          "n": 269,
+          "n_absolute": 269,
+          "n_acceleration_triplets": 263,
+          "annotation_eligible": 300,
+          "prediction_available": 269,
+          "coverage": 0.8966666666666666,
+          "rr_mpjpe_mm": 20.362279307621197,
+          "pa_mpjpe_mm": 8.335668816365397,
+          "base16_rr_mpjpe_mm": 17.87412676549943,
+          "mpjpe_mm": 26.153163890401657,
+          "wrist_error_mm": 26.591135810036796,
+          "native_mpjpe_mm": 75.44665967656665,
+          "native_definition_rr_mpjpe_mm": 20.218610994380477,
+          "native_definition_pa_mpjpe_mm": 8.195663359723152,
+          "rr_acceleration_error_m_s2": 9.39291110981644,
+          "pa_scale_median": 0.9989024397304165,
+          "absolute_output": "calibration-only rigid translation adapter",
+          "per_hand": {
+            "left": {
+              "n": 119,
+              "rr_mpjpe_mm": 22.434663893124643,
+              "pa_mpjpe_mm": 10.251102483754096
+            },
+            "right": {
+              "n": 150,
+              "rr_mpjpe_mm": 18.71818753645513,
+              "pa_mpjpe_mm": 6.81609144023703
+            }
+          },
+          "adapter_reprojection_rmse_px": {
+            "n": 269,
+            "median": 0.47698959708213806,
+            "p95": 1.1023610830307007,
+            "max": 1.5060863494873047
+          },
+          "adapter_translation_norm_mm": {
+            "n": 269,
+            "median": 58.144264221191406,
+            "p95": 140.7035675048828,
+            "max": 169.52304077148438
+          },
+          "adapter_root_relative_change_max_mm": 5.9604644775390625e-05
+        },
+        {
+          "method": "HaWoR",
+          "n": 269,
+          "n_absolute": 269,
+          "n_acceleration_triplets": 263,
+          "annotation_eligible": 300,
+          "prediction_available": 300,
+          "coverage": 1.0,
+          "rr_mpjpe_mm": 13.276368933847777,
+          "pa_mpjpe_mm": 5.358539575352806,
+          "base16_rr_mpjpe_mm": 12.128171248101417,
+          "mpjpe_mm": 21.391341489708058,
+          "wrist_error_mm": 22.86394300818673,
+          "native_mpjpe_mm": 21.391341489708058,
+          "native_definition_rr_mpjpe_mm": 13.276368933847777,
+          "native_definition_pa_mpjpe_mm": 5.358539575352806,
+          "rr_acceleration_error_m_s2": 1.839079033495541,
+          "pa_scale_median": 0.9924329025451201,
+          "absolute_output": "calibrated camera-mode output",
+          "per_hand": {
+            "left": {
+              "n": 119,
+              "rr_mpjpe_mm": 12.74535691647911,
+              "pa_mpjpe_mm": 5.61834488356535
+            },
+            "right": {
+              "n": 150,
+              "rr_mpjpe_mm": 13.697638467626918,
+              "pa_mpjpe_mm": 5.152427364170854
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "aggregate": [
+    {
+      "method": "HGGT",
+      "annotation_eligible": 746,
+      "prediction_available": 715,
+      "coverage": 0.9584450402144772,
+      "n": 715,
+      "n_absolute": 715,
+      "n_acceleration_triplets": 701,
+      "rr_mpjpe_mm": 19.04769505493398,
+      "pa_mpjpe_mm": 8.785851377827417,
+      "mpjpe_mm": 29.746178176764186,
+      "native_mpjpe_mm": 131.2987847503217,
+      "rr_acceleration_error_m_s2": 8.275064202187647,
+      "adapter_reprojection_rmse_px": {
+        "n": 715,
+        "median": 0.39547860622406006,
+        "p95": 1.2939066767692557,
+        "max": 1.5904253721237183
+      }
+    },
+    {
+      "method": "HaWoR",
+      "annotation_eligible": 746,
+      "prediction_available": 746,
+      "coverage": 1.0,
+      "n": 715,
+      "n_absolute": 715,
+      "n_acceleration_triplets": 701,
+      "rr_mpjpe_mm": 15.075196667863976,
+      "pa_mpjpe_mm": 6.65500689882065,
+      "mpjpe_mm": 27.2657560806603,
+      "native_mpjpe_mm": 27.2657560806603,
+      "rr_acceleration_error_m_s2": 1.76265123602164
+    }
+  ]
+}

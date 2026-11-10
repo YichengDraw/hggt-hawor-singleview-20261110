@@ -1,0 +1,119 @@
+{
+  "protocol": {
+    "comparison": "same RGB camera, cached image pixels, detector tracks and calibration",
+    "n_unit": "hand-frame pairs",
+    "coverage_unit": "fraction 0..1 of all annotated hands",
+    "paired_mask": "GT valid AND common detector available AND both methods finite",
+    "primary": "wrist-relative and per-hand-frame similarity-aligned MPJPE in mm",
+    "joint_definition": "16 native MANO FK joints retained; each dataset's 5 GT fingertip vertex markers substituted for both methods",
+    "tip_markers": {
+      "DexYCB": [
+        745,
+        317,
+        444,
+        556,
+        673
+      ],
+      "HOT3D-Aria": [
+        744,
+        320,
+        443,
+        554,
+        671
+      ]
+    },
+    "absolute": "HGGT uses a rigid translation fit to its own predicted 2D points and K; HaWoR uses calibrated scalar-focal/principal-point output",
+    "calibration": "HGGT uses per-frame full K; HaWoR API takes scalar focal=(fx+fy)/2 and median principal point per clip",
+    "world_trajectory": "not evaluated; camera-space hand reconstruction only",
+    "acceleration": "root-relative joint acceleration error in m/s^2; DexYCB nominal 30 Hz, Aria recorded nanosecond timestamps; only triplets valid for both methods",
+    "gt_usage": "scoring only; no GT poses, camera trajectory, boxes or depth enter inference",
+    "scope": "four development examples; no claim of an official benchmark or training-disjoint test"
+  },
+  "sample": {
+    "id": "dexycb_banana",
+    "dataset": "DexYCB",
+    "frames": 72,
+    "annotation_eligible": 72,
+    "detected_hand_frames": 72,
+    "paired_hand_frames": 72,
+    "methods": [
+      {
+        "method": "HGGT",
+        "n": 72,
+        "n_absolute": 72,
+        "n_acceleration_triplets": 70,
+        "annotation_eligible": 72,
+        "prediction_available": 72,
+        "coverage": 1.0,
+        "rr_mpjpe_mm": 9.750358114967554,
+        "pa_mpjpe_mm": 4.001693770497931,
+        "base16_rr_mpjpe_mm": 8.650328541601791,
+        "mpjpe_mm": 39.58631266248748,
+        "wrist_error_mm": 41.676275214111016,
+        "native_mpjpe_mm": 313.8623175826912,
+        "native_definition_rr_mpjpe_mm": 9.899331791252441,
+        "native_definition_pa_mpjpe_mm": 4.113416763274216,
+        "rr_acceleration_error_m_s2": 4.280577570154142,
+        "pa_scale_median": 0.9889483719594128,
+        "absolute_output": "calibration-only rigid translation adapter",
+        "per_hand": {
+          "left": {
+            "n": 0,
+            "rr_mpjpe_mm": null,
+            "pa_mpjpe_mm": null
+          },
+          "right": {
+            "n": 72,
+            "rr_mpjpe_mm": 9.750358114967554,
+            "pa_mpjpe_mm": 4.001693770497931
+          }
+        },
+        "adapter_reprojection_rmse_px": {
+          "n": 72,
+          "median": 1.1625785827636719,
+          "p95": 1.4404922366142274,
+          "max": 1.4598530530929565
+        },
+        "adapter_translation_norm_mm": {
+          "n": 72,
+          "median": 336.758544921875,
+          "p95": 506.6507751464845,
+          "max": 593.0491333007812
+        },
+        "adapter_root_relative_change_max_mm": 5.9604644775390625e-05
+      },
+      {
+        "method": "HaWoR",
+        "n": 72,
+        "n_absolute": 72,
+        "n_acceleration_triplets": 70,
+        "annotation_eligible": 72,
+        "prediction_available": 72,
+        "coverage": 1.0,
+        "rr_mpjpe_mm": 11.283541392775115,
+        "pa_mpjpe_mm": 2.6004962459369896,
+        "base16_rr_mpjpe_mm": 9.99789603472577,
+        "mpjpe_mm": 27.45422159874471,
+        "wrist_error_mm": 25.860750412221705,
+        "native_mpjpe_mm": 27.45422159874471,
+        "native_definition_rr_mpjpe_mm": 11.379270043996609,
+        "native_definition_pa_mpjpe_mm": 2.5187390222295005,
+        "rr_acceleration_error_m_s2": 1.8955313644685166,
+        "pa_scale_median": 0.9972577414554304,
+        "absolute_output": "calibrated camera-mode output",
+        "per_hand": {
+          "left": {
+            "n": 0,
+            "rr_mpjpe_mm": null,
+            "pa_mpjpe_mm": null
+          },
+          "right": {
+            "n": 72,
+            "rr_mpjpe_mm": 11.283541392775115,
+            "pa_mpjpe_mm": 2.6004962459369896
+          }
+        }
+      }
+    ]
+  }
+}

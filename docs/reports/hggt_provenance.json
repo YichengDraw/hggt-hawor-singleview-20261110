@@ -1,0 +1,32 @@
+{
+  "method": "HGGT",
+  "source_commit": "779929115643ebb88abd531c683af7e4ed892d99",
+  "checkpoint_file": "pytorch_model.bin",
+  "checkpoint_bytes": 5471898175,
+  "checkpoint_missing_keys": [],
+  "checkpoint_unexpected_keys": [],
+  "model_parameter_count": 1367837836,
+  "torch_version": "2.7.0+cu128",
+  "device": "cuda:0",
+  "gpu": "NVIDIA L40S",
+  "precision": "torch.bfloat16",
+  "views_per_timestamp": 1,
+  "batch_size": 1,
+  "crop_size": 518,
+  "crop_bbox_expansion": 1.2,
+  "temporal_smoothing": false,
+  "gt_hand_access": false,
+  "crop": "Official eval virtual camera rotation using input camera calibration; predicted HaWoR detector boxes",
+  "canonical_camera": "Official eval: single-view first camera is identity; raw predicted extrinsics also retained",
+  "left_hand": "Mirror full image about camera principal point, right MANO, inverse geometry and reflection",
+  "camera_adapter": "Rigid translation fitted to the model's own full-frame projected 21 joints and known K; pose/shape unchanged",
+  "rr_pa_basis": "native MANO geometry rotated/reflected back to original camera, without intrinsic point deformation",
+  "side_order": [
+    "left",
+    "right"
+  ],
+  "joint_order": "OpenPose21: wrist, thumb, index, middle, ring, pinky",
+  "unit": "metre",
+  "manifest": "/nvme-ssd2/zhaoyicheng/hggt-reproduction-20261110/data/inputs_manifest.json",
+  "model_load_seconds": 17.66634464263916
+}

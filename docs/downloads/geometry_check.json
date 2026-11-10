@@ -1,0 +1,6 @@
+{
+  "geometry_self_check": "passed",
+  "right_and_left_inverse_max_error_px": 2.2737367544323206e-13,
+  "translation_max_error_m": 1.942890293094024e-16,
+  "translation_reprojection_rms_px": 5.718077148933933e-14
+}

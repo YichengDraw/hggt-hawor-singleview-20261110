@@ -54,6 +54,9 @@ def main():
     source_hggt = root / "outputs/hggt/provenance.json"
     if source_hggt.is_file():
         shutil.copyfile(source_hggt, report_dir / "hggt_provenance.json")
+    source_hawor = root / "reports/data_inventory_hawor_provenance.json"
+    if source_hawor.is_file():
+        shutil.copyfile(source_hawor, report_dir / "hawor_provenance.json")
     summary_rows = []
     input_records = []
     for record in records:
@@ -77,6 +80,8 @@ def main():
         record["links"].extend([
             {"label": "本序列完整评价 JSON", "href": f"reports/{sid}_metrics.json"},
             {"label": "原始帧与输入记录 CSV", "href": f"reports/{sid}_frames.csv"},
+            {"label": "HGGT 预测 NPZ（原生与适配）", "href": f"downloads/predictions/{sid}_hggt.npz"},
+            {"label": "HaWoR 预测 NPZ", "href": f"downloads/predictions/{sid}_hawor.npz"},
         ])
         write_json(report_dir / f"{sid}_metrics.json", {"protocol": scored.get("protocol", {}), "sample": score})
         inp = np.load(input_by_id[sid]["input_npz"], allow_pickle=False)
@@ -108,16 +113,26 @@ def main():
     aggregate = {x["method"]: x for x in scored.get("aggregate", [])}
     if "HGGT" in aggregate and "HaWoR" in aggregate:
         hg, hw = aggregate["HGGT"], aggregate["HaWoR"]
+        if all(hg.get(key, -1) > hw.get(key, float("inf")) for key in ["rr_mpjpe_mm", "pa_mpjpe_mm", "rr_acceleration_error_m_s2"]):
+            summary.insert(0, "这四例里，HaWoR 总体更准、时序更稳。")
         summary.append(f"在 {total_common} 个共同有效手帧上，根相对关节误差为 HGGT {num(hg.get('rr_mpjpe_mm'))} mm、HaWoR {num(hw.get('rr_mpjpe_mm'))} mm；对齐后误差为 {num(hg.get('pa_mpjpe_mm'))} / {num(hw.get('pa_mpjpe_mm'))} mm。")
+        summary.append(f"HGGT 原生绝对关节误差为 {num(hg.get('native_mpjpe_mm'))} mm，仅平移适配后为 {num(hg.get('mpjpe_mm'))} mm；HaWoR 标定重跑为 {num(hw.get('mpjpe_mm'))} mm。两种 HGGT 输出在下表分列，主视频显示适配后的结果。")
+        summary.append(f"去腕后的加速度误差为 HGGT {num(hg.get('rr_acceleration_error_m_s2'))}、HaWoR {num(hw.get('rr_acceleration_error_m_s2'))} m/s²；数值越小，重建的时序变化越接近真值。")
     summary.append(f"可评价标注共 {total_eligible} 个手帧；画面中的缺手与 HaWoR 时序补全均保留，覆盖率单独列出。")
     downloads = [
         {"label": "完整评价 JSON", "href": "reports/metrics.json"},
         {"label": "指标汇总 CSV", "href": "reports/summary.csv"},
         {"label": "比较方法与显示口径", "href": "METHOD.md"},
         {"label": "输入身份与标定", "href": "reports/inputs.json"},
+        {"label": "权重来源与身份", "href": "downloads/checkpoint_provenance.json"},
+        {"label": "几何变换核对", "href": "downloads/geometry_check.json"},
     ]
     if (report_dir / "hggt_provenance.json").is_file():
         downloads.append({"label": "HGGT 运行配置", "href": "reports/hggt_provenance.json"})
+    if (report_dir / "hawor_provenance.json").is_file():
+        downloads.append({"label": "HaWoR 来源与配置", "href": "reports/hawor_provenance.json"})
+    if (site / "DATA_AND_EVALUATION.md").is_file():
+        downloads.append({"label": "数据与评价细节", "href": "DATA_AND_EVALUATION.md"})
     manifest = {
         "schema_version": 1, "title": "HGGT × HaWoR · 单视角复现", "updated_at": "2026-11-10",
         "subtitle": "DexYCB 与 HOT3D-Aria：相同单相机视频下的手部重建比较。",
@@ -131,15 +146,18 @@ def main():
         "scope_notes": [
             "主视频使用 HGGT 的标定平移适配：保留原生手形与姿态，只用模型自己的二维投影和相机内参拟合平移。原生投影另行提供。",
             "HaWoR 使用同一标定的中位数标量焦距和主点；渲染保留各方法实际使用的内参。样例结果用于检查复现效果，完整实验口径见方法说明。",
+            "网格覆盖图只处理手的自遮挡，未模拟物体或场景的遮挡；位于杯子后方的手面片也可能叠加在 RGB 上。",
         ],
         "metric_definitions": [
             {"key": "n", "label": "共同手帧", "unit": "", "decimals": 0, "description": "同一时刻的一只手计一个手帧；几何比较采用双方共同有效的手帧集合。"},
             {"key": "coverage_percent", "label": "覆盖率", "unit": "%", "decimals": 1, "description": "有有效预测的手帧占全部可评价标注手帧的比例；缺失预测单独计入覆盖率。"},
             {"key": "rr_mpjpe_mm", "label": "根相对误差", "unit": "mm", "description": "移除腕部平移后的平均关节误差，保留姿态、方向和尺度差异；使用原生几何。越低越好。"},
             {"key": "pa_mpjpe_mm", "label": "对齐后误差", "unit": "mm", "description": "每个手帧经相似变换对齐后计算的关节误差，进一步消除整体旋转和尺度差异。越低越好。"},
-            {"key": "mpjpe_mm", "label": "绝对位置误差", "unit": "mm", "description": "相机空间绝对关节误差；HGGT 使用标定平移适配，HaWoR 使用标定相机结果。越低越好。"},
+            {"key": "native_mpjpe_mm", "label": "原生绝对误差", "unit": "mm", "description": "原生几何转换回原相机后的绝对关节误差，保留模型自身预测的距离与尺度；HGGT 未使用平移适配。越低越好。"},
+            {"key": "mpjpe_mm", "label": "主图绝对误差", "unit": "mm", "description": "主视频显示的相机空间绝对关节误差：HGGT 使用仅平移的标定适配，HaWoR 使用标定相机原生输出。越低越好。"},
+            {"key": "rr_acceleration_error_m_s2", "label": "加速度误差", "unit": "m/s²", "description": "去腕后的关节加速度与真值之差，按真实时间戳计算，仅统计双方连续三帧有效的手；越低越好。"},
         ],
-        "metrics_note": "误差均为毫米，越小越好。根相对与对齐后误差衡量原生手形；绝对位置误差使用各自的相机空间输出。覆盖率的分母为全部可评价标注手帧。原生绝对误差、加速度及左右手分项见完整评价记录。",
+        "metrics_note": "误差越小越好。根相对与对齐后误差直接衡量原生手形；HGGT 的原生绝对误差与仅平移适配后的主图误差分列。HaWoR 两列均为标定重跑的原生输出。覆盖率的分母为全部可评价标注手帧；加速度误差单位为 m/s²。",
         "downloads": downloads,
         "sources": [
             {"label": "HGGT · 官方代码", "url": "https://github.com/lym29/HGGT", "note": "单视图推理通过官方多视图接口的 N=1 设置执行。"},

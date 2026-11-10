@@ -351,7 +351,7 @@ def render_sample(root, site, sample, args):
         "camera": str(sample.get("camera_id", sample.get("camera", ""))),
         "frame_count": n, "fps": fps, "source_frame_ids": frame_ids[:n].tolist(), "status": "complete",
         "description": "完全相同的 RGB 帧；逐帧对齐显示两种方法的相机空间网格。",
-        "legend": "品红：左手；青色：右手。HGGT 主画面使用标定平移适配；原生投影另见下载。",
+        "legend": "品红：左手；青色：右手。RGB 网格叠加仅处理手的自遮挡，未模拟物体和场景遮挡。",
         "media": {"comparison": {"src": f"{prefix}/combined.mp4", "poster": f"{prefix}/keyframe_{n // 2:06d}.jpg",
                                    "label": "原始 RGB / HGGT（标定平移适配） / HaWoR（标定相机）",
                                    "width": int(combined.shape[1]), "height": int(combined.shape[0])}},

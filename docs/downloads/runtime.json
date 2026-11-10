@@ -1,0 +1,88 @@
+{
+  "hggt": [
+    {
+      "sample": "dexycb_box",
+      "total_frames": 74,
+      "total_hand_frames": 74,
+      "inferred_hand_frames": 74,
+      "adapter_valid_hand_frames": 74,
+      "wall_seconds": 7.619723558425903,
+      "model_seconds_sum": 6.752072334289551,
+      "peak_cuda_memory_allocated_bytes": 7662426624,
+      "is_smoke_subset": false,
+      "source_commit": "779929115643ebb88abd531c683af7e4ed892d99",
+      "finished_utc": "2026-11-10T07:25:17Z"
+    },
+    {
+      "sample": "dexycb_banana",
+      "total_frames": 72,
+      "total_hand_frames": 72,
+      "inferred_hand_frames": 72,
+      "adapter_valid_hand_frames": 72,
+      "wall_seconds": 6.777117490768433,
+      "model_seconds_sum": 5.944474697113037,
+      "peak_cuda_memory_allocated_bytes": 7660560384,
+      "is_smoke_subset": false,
+      "source_commit": "779929115643ebb88abd531c683af7e4ed892d99",
+      "finished_utc": "2026-11-10T07:25:24Z"
+    },
+    {
+      "sample": "aria_1976",
+      "total_frames": 150,
+      "total_hand_frames": 300,
+      "inferred_hand_frames": 300,
+      "adapter_valid_hand_frames": 300,
+      "wall_seconds": 29.015730619430542,
+      "model_seconds_sum": 24.81821060180664,
+      "peak_cuda_memory_allocated_bytes": 7660560384,
+      "is_smoke_subset": false,
+      "source_commit": "779929115643ebb88abd531c683af7e4ed892d99",
+      "finished_utc": "2026-11-10T07:25:53Z"
+    },
+    {
+      "sample": "aria_3209",
+      "total_frames": 150,
+      "total_hand_frames": 269,
+      "inferred_hand_frames": 269,
+      "adapter_valid_hand_frames": 269,
+      "wall_seconds": 29.963567972183228,
+      "model_seconds_sum": 26.096609115600586,
+      "peak_cuda_memory_allocated_bytes": 7660560384,
+      "is_smoke_subset": false,
+      "source_commit": "779929115643ebb88abd531c683af7e4ed892d99",
+      "finished_utc": "2026-11-10T07:26:23Z"
+    }
+  ],
+  "hawor": [],
+  "hggt_configuration": {
+    "method": "HGGT",
+    "source_commit": "779929115643ebb88abd531c683af7e4ed892d99",
+    "checkpoint_file": "pytorch_model.bin",
+    "checkpoint_bytes": 5471898175,
+    "checkpoint_missing_keys": [],
+    "checkpoint_unexpected_keys": [],
+    "model_parameter_count": 1367837836,
+    "torch_version": "2.7.0+cu128",
+    "device": "cuda:0",
+    "gpu": "NVIDIA L40S",
+    "precision": "torch.bfloat16",
+    "views_per_timestamp": 1,
+    "batch_size": 1,
+    "crop_size": 518,
+    "crop_bbox_expansion": 1.2,
+    "temporal_smoothing": false,
+    "gt_hand_access": false,
+    "crop": "Official eval virtual camera rotation using input camera calibration; predicted HaWoR detector boxes",
+    "canonical_camera": "Official eval: single-view first camera is identity; raw predicted extrinsics also retained",
+    "left_hand": "Mirror full image about camera principal point, right MANO, inverse geometry and reflection",
+    "camera_adapter": "Rigid translation fitted to the model's own full-frame projected 21 joints and known K; pose/shape unchanged",
+    "rr_pa_basis": "native MANO geometry rotated/reflected back to original camera, without intrinsic point deformation",
+    "side_order": [
+      "left",
+      "right"
+    ],
+    "joint_order": "OpenPose21: wrist, thumb, index, middle, ring, pinky",
+    "unit": "metre",
+    "model_load_seconds": 17.66634464263916
+  }
+}

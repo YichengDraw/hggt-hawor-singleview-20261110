@@ -76,6 +76,14 @@ def average(array, mask):
     return float(np.mean(array[use])) if use.any() else None
 
 
+def distribution(array, mask):
+    values = np.asarray(array)[mask & np.isfinite(array)]
+    if not len(values):
+        return {"n": 0, "median": None, "p95": None, "max": None}
+    return {"n": int(len(values)), "median": float(np.median(values)),
+            "p95": float(np.percentile(values, 95)), "max": float(np.max(values))}
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--root", type=Path, required=True)
@@ -115,7 +123,9 @@ def main():
             method_data = {"HGGT": {"joints": hj, "native_joints": hg["joints_cam_native"],
                                     "absolute_joints": hj_cal, "valid": hg["valid"].astype(bool),
                                     "absolute_valid": hg["valid"].astype(bool) & hg["adapter_valid"].astype(bool),
-                                    "K_used": inp["K"]}, **method_data}
+                                    "K_used": inp["K"],
+                                    "adapter_rmse": hg["translation_reprojection_rmse_px"],
+                                    "translation_delta_norm_mm": np.linalg.norm(hg["translation_delta"], axis=-1)*1000}, **method_data}
         paired = gt_mask & detector
         for data in method_data.values():
             paired &= data["valid"] & finite_mask(data["joints"])
@@ -148,6 +158,12 @@ def main():
                    "pa_scale_median": float(np.median(e["pa_scale"][paired])),
                    "absolute_output": "calibration-only rigid translation adapter" if method == "HGGT" else "calibrated camera-mode output"}
             row["per_hand"] = {}
+            if method == "HGGT":
+                row["adapter_reprojection_rmse_px"] = distribution(data["adapter_rmse"], coverage_mask)
+                row["adapter_translation_norm_mm"] = distribution(data["translation_delta_norm_mm"], coverage_mask)
+                rr_delta = ((data["absolute_joints"] - data["absolute_joints"][:, :, :1])
+                            - (data["joints"] - data["joints"][:, :, :1]))
+                row["adapter_root_relative_change_max_mm"] = float(np.max(np.abs(rr_delta[paired_abs]))*1000) if paired_abs.any() else None
             for h, side in enumerate(["left", "right"]):
                 side_mask = paired.copy(); side_mask[:, 1-h] = False
                 row["per_hand"][side] = {"n": int(side_mask.sum()), "rr_mpjpe_mm": average(e["rr_mpjpe_mm"], side_mask),
@@ -159,6 +175,9 @@ def main():
             arrays[key+"_adapted_mpjpe_mm"] = e_abs["mpjpe_mm"]
             ag = aggregate.setdefault(method, {"eligible": 0, "available": 0, "values": {}})
             ag["eligible"] += int(gt_mask.sum()); ag["available"] += int(coverage_mask.sum())
+            if method == "HGGT":
+                ag.setdefault("adapter_rmse", []).extend(data["adapter_rmse"][coverage_mask & np.isfinite(data["adapter_rmse"])].tolist())
+                arrays["hggt_adapter_reprojection_rmse_px"] = data["adapter_rmse"]
             for field, array, mask in [("rr_mpjpe_mm", e["rr_mpjpe_mm"], paired),
                                        ("pa_mpjpe_mm", e["pa_mpjpe_mm"], paired),
                                        ("mpjpe_mm", e_abs["mpjpe_mm"], paired_abs),
@@ -177,8 +196,13 @@ def main():
     aggregate_rows = []
     for method, ag in aggregate.items():
         ar = {"method": method, "annotation_eligible": ag["eligible"], "prediction_available": ag["available"],
-              "coverage": ag["available"]/ag["eligible"], "n": len(ag["values"]["rr_mpjpe_mm"])}
+              "coverage": ag["available"]/ag["eligible"], "n": len(ag["values"]["rr_mpjpe_mm"]),
+              "n_absolute": len(ag["values"]["mpjpe_mm"]),
+              "n_acceleration_triplets": len(ag["values"]["rr_acceleration_error_m_s2"])}
         ar.update({field: float(np.mean(values)) if values else None for field,values in ag["values"].items()})
+        if method == "HGGT":
+            errors = np.array(ag["adapter_rmse"])
+            ar["adapter_reprojection_rmse_px"] = distribution(errors, np.ones_like(errors, dtype=bool))
         aggregate_rows.append(ar)
     report = {"schema": "hggt-hawor-metrics-v1", "baseline_only": args.baseline_only,
               "protocol": {"comparison": "same RGB camera, cached image pixels, detector tracks and calibration",
@@ -190,7 +214,7 @@ def main():
                            "absolute": "HGGT uses a rigid translation fit to its own predicted 2D points and K; HaWoR uses calibrated scalar-focal/principal-point output",
                            "calibration": "HGGT uses per-frame full K; HaWoR API takes scalar focal=(fx+fy)/2 and median principal point per clip",
                            "world_trajectory": "not evaluated; camera-space hand reconstruction only",
-                           "acceleration": "root-relative joint acceleration error in m/s^2, actual timestamps, only triplets valid for both methods",
+                           "acceleration": "root-relative joint acceleration error in m/s^2; DexYCB nominal 30 Hz, Aria recorded nanosecond timestamps; only triplets valid for both methods",
                            "gt_usage": "scoring only; no GT poses, camera trajectory, boxes or depth enter inference",
                            "scope": "four development examples; no claim of an official benchmark or training-disjoint test"},
               "samples": sample_results, "aggregate": aggregate_rows}

@@ -341,7 +341,7 @@
     section.append(heading);
     const identity = [sample.sequence || sample.sequence_id, sample.camera ? `相机 ${sample.camera}` : ''].filter(Boolean).join(' · ');
     if (identity) section.append(el('p', 'sequence', identity));
-    const detail = [sample.frame_count ? `${sample.frame_count} 帧` : '', sample.fps ? `${sample.fps} fps` : '', sample.description || ''].filter(Boolean).join(' · ');
+    const detail = [sample.frame_count ? `${sample.frame_count} 帧` : '', sample.fps ? `${Number(sample.fps).toLocaleString('zh-CN', {maximumFractionDigits: 3})} fps` : '', sample.description || ''].filter(Boolean).join(' · ');
     if (detail) section.append(el('p', 'sample-description', detail));
     section.append(makePlayer(sample));
     if (sample.notes && sample.notes.length) { const notes = el('div', 'sample-notes'); paragraphs(notes, sample.notes); section.append(notes); }
