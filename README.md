@@ -39,3 +39,9 @@ python scripts/build_showcase_manifest.py --root RUN_ROOT
 HGGT源码置于 `RUN_ROOT/upstream`，权重置于 `RUN_ROOT/weights/pytorch_model.bin`。完整数据准备和HaWoR环境说明见 [scripts/data_eval/README.md](scripts/data_eval/README.md)。该文件记录本次运行资产位置；在其他机器上应改为自己的授权数据和模型路径。
 
 官方代码：[HGGT](https://github.com/lym29/HGGT)、[HaWoR](https://github.com/ThunderVVV/HaWoR)。HGGT固定代码提交 `779929115643ebb88abd531c683af7e4ed892d99`，权重来源与SHA-256见 [checkpoint_provenance.json](docs/downloads/checkpoint_provenance.json)。本仓库提供实验适配代码和结果；模型权重、MANO授权资产及完整原始数据集保留其各自许可与下载渠道。
+
+## 视线方向误差分解（2026-11-11）
+
+[网站统计](https://yichengdraw.github.io/hggt-hawor-singleview-20261110/#view-depth-errors)基于同一715个有效手帧、15,015个关节。按每帧GT手腕射线分解绝对位置误差，HGGT原生视线误差能量占98.53%，HaWoR为63.31%；沿视线RMSE为203.48/25.58 mm，横向RMSE为24.86/19.47 mm。HGGT平移适配后另列为80.17%、31.75/15.79 mm。总体按平方误差累积，不是逐序列百分比平均，也不是准确率。
+
+复算：`python scripts/evaluate_view_depth.py`（NumPy）。输出[JSON](docs/downloads/view_depth_errors.json)含源文件哈希、逐例和总体统计；另有[CSV](docs/downloads/view_depth_errors.csv)。输入直接使用网站已有3D关节数据，无新训练或推理。

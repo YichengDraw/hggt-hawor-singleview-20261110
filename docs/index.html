@@ -29,6 +29,19 @@
       <div id="metrics-summary"></div>
       <details class="metric-guide" id="metric-guide"><summary>指标怎么读</summary><div id="metric-definitions"></div></details>
     </section>
+    <section class="section-block" id="view-depth-errors" aria-labelledby="depth-title">
+      <div class="section-heading"><h2 id="depth-title">误差主要发生在“远近”方向吗？</h2><a class="small-link" href="downloads/view_depth_errors.json">统计 JSON ↗</a></div>
+      <p><strong>这四例中，HGGT 原生位置误差更集中在视线方向：98.53%，HaWoR 为 63.31%。</strong>同样的 715 个有效手帧中，沿视线的 RMSE 分别为 203.48 mm 和 25.58 mm；垂直视线的合成 RMSE 为 24.86 mm 和 19.47 mm。HGGT 原生结果的主要短板是整手的远近位置，但两者的差距和误差方向随序列变化。</p>
+      <div class="table-scroll" role="region" aria-label="视线误差比较表，可横向滚动" tabindex="0"><table class="metrics-table"><caption>共同有效帧 · 21 个关节 · 相机坐标绝对位置 · 距离单位 mm</caption><thead><tr><th scope="col">序列</th><th scope="col">手帧数</th><th scope="col">方法</th><th scope="col">视线误差能量占比</th><th scope="col">视线 RMSE</th><th scope="col">横向 RMSE</th><th scope="col">整体 RMSE</th></tr></thead><tbody><tr><th scope='row'>总体</th><td>715</td><td>HGGT 原生</td><td>98.53%</td><td>203.48</td><td>24.86</td><td>205.00</td></tr><tr><th scope='row'>总体</th><td>715</td><td>HaWoR</td><td>63.31%</td><td>25.58</td><td>19.47</td><td>32.15</td></tr><tr><th scope='row'>DexYCB 箱子</th><td>74</td><td>HGGT 原生</td><td>99.35%</td><td>510.85</td><td>41.22</td><td>512.51</td></tr><tr><th scope='row'>DexYCB 箱子</th><td>74</td><td>HaWoR</td><td>89.26%</td><td>45.69</td><td>15.85</td><td>48.36</td></tr><tr><th scope='row'>DexYCB 香蕉</th><td>72</td><td>HGGT 原生</td><td>99.17%</td><td>320.41</td><td>29.29</td><td>321.75</td></tr><tr><th scope='row'>DexYCB 香蕉</th><td>72</td><td>HaWoR</td><td>85.59%</td><td>27.21</td><td>11.16</td><td>29.41</td></tr><tr><th scope='row'>Aria 001976</th><td>300</td><td>HGGT 原生</td><td>86.21%</td><td>51.20</td><td>20.48</td><td>55.15</td></tr><tr><th scope='row'>Aria 001976</th><td>300</td><td>HaWoR</td><td>46.54%</td><td>22.86</td><td>24.50</td><td>33.51</td></tr><tr><th scope='row'>Aria 003209</th><td>269</td><td>HGGT 原生</td><td>94.28%</td><td>88.68</td><td>21.85</td><td>91.33</td></tr><tr><th scope='row'>Aria 003209</th><td>269</td><td>HaWoR</td><td>61.95%</td><td>19.60</td><td>15.36</td><td>24.90</td></tr></tbody></table></div>
+      <p class="scope-notes">能量占比描述误差的方向，不是准确率。总体值将所有关节平方误差汇总后计算，较大的误差贡献更多；并非四条序列百分比的简单平均。RMSE 也不同于上方的 MPJPE。</p>
+      <details class="metric-guide"><summary>计算方法、适配结果与适用范围</summary>
+        <p>每个有效手帧，取从相机原点指向 GT 手腕的单位向量 u。每关节误差 e = 预测 − GT，视线分量为 e·u，横向平方误差为 ||e||² − (e·u)²。视线能量占比 = Σ(e·u)² / Σ||e||²；视线 RMSE = √mean((e·u)²)，横向 RMSE = √mean(||e||² − (e·u)²)。手偏离画面中心时，视线不等于相机 Z 轴。</p>
+        <p>三种几何统一使用 GT、HGGT 原生、HGGT 适配后和 HaWoR 的共同有效手帧与关节；共 715 手帧、15,015 关节，来源是网站公开的相机空间关节 JSON。无逐帧 GT 对齐、去腕或 PA 对齐。GT 只用于评分及定义视线。JSON 坐标精度为微米级，统计值按显示精度舍入。</p>
+        <p><strong>与主图的区别：</strong>主图默认展示 HGGT 平移适配后几何，本表的 HGGT 为原生输出。HGGT 适配后总体视线占比为 80.17%，视线 / 横向 RMSE 为 31.75 / 15.79 mm；完整分例结果在下载表中。适配利用已知内参和模型二维投影估计整体平移，不读取 GT。不能把适配后的误差当作原生模型性能。</p>
+        <p>结果针对四个开发样例，不是论文全基准结论。绝对位置分解同时包含整体平移和局部关节误差；如需判断手指局部形状，应结合去腕指标。此分析没有通过新的训练或推理挑选样例。</p>
+        <p><a href="downloads/view_depth_errors.csv">下载全部统计 CSV</a> · <a href="https://github.com/YichengDraw/hggt-hawor-singleview-20261110/blob/main/scripts/evaluate_view_depth.py">可复算脚本</a></p>
+      </details>
+    </section>
     <div class="sample-section-heading">
       <h2>逐序列对比</h2>
       <div id="dataset-filters" class="dataset-filters" aria-label="按数据集筛选"></div>
